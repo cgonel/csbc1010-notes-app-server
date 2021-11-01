@@ -19,21 +19,34 @@ router.post('/', (req, res) => {
   */
   const newText = req.body.text
 
-  /*
+  let saveNewNote = `INSERT INTO notes(text) 
+                     VALUES('` + newText + `')`
+  
+  db.query(saveNewNote, (err) =>{
+    if(err){
+      throw err
+    }
+  })
 
-    Your code here...
+  let findNewNote = `SELECT * FROM notes
+                     WHERE text = '`+ newText +`'
+                     ORDER BY dateCreated DESC
+                     LIMIT 1`
 
-    const newNote = {} // this is the response object, make sure to replace with actual value
+  db.query(findNewNote, (err,results)=>{
+    if(err){
+      throw err
+    }
 
-
-
+    const newNote = results // this is the response object, make sure to replace with actual value
+    
     // Upon succ, run the following lines to validate the response object and respond to client
 
     // --- begin of succ flow ---
-    if (!validateNote(newNote)) {
-      res.status(500).send('Invalid data type')
-    }
-	  res.status(201).send({ newNote })
+    // if (!validateNote(newNote)) {
+    //   res.status(500).send('Invalid data type')
+    // }
+	  res.send({ newNote })
     // --- end of succ flow ---
 
 
@@ -41,21 +54,11 @@ router.post('/', (req, res) => {
     // Upon fail, run the following lines to respond with an error
 
     // --- begin of fail flow ---
-    res.status(500).send('Fail to insert')
+    // res.status(500).send('Fail to insert')
     // --- end of fail flow ---
+  })
+
     
-  */
-
-
-
-  // TODO-4.1: Remove this section once you start working on TODO-4
-  // --- Remove section begins ---
-  const newNote = { id: 2, text: newText, dateCreated: new Date().toISOString().split('T')[0], lastModified: new Date().toISOString().split('T')[0] }
-  if (!validateNote(newNote)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.status(201).send({ newNote })
-  // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
 
@@ -78,20 +81,33 @@ router.put('/', (req, res) => {
 	const noteId = req.body.id
 	const newText = req.body.text
 
-	/* 
+  let updateNote = `UPDATE notes 
+                    SET text = '`+ newText +`',
+                    lastModified = now()
+                    WHERE id = `+ noteId +``
 
-		// You code here...
+  db.query(updateNote, (err)=>{
+    if(err){
+      throw err
+    }
+  })
 
-		const updatedNote = {} // this is the response object, make sure to replace with actual value
+  let viewUpdateNote = `SELECT * FROM notes
+                        WHERE id = `+ noteId +``
 
+  db.query(viewUpdateNote, (err, results)=>{
+    if(err){
+      throw err
+    }
 
+		const updatedNote = results // this is the response object, make sure to replace with actual value
 
-    // Upon succ, run the following lines to validate the response object and respond to client
+  // Upon succ, run the following lines to validate the response object and respond to client
 
     // --- begin of succ flow ---
-    if (!validateNote(updatedNote)) {
-      res.status(500).send('Invalid data type')
-    }
+    // if (!validateNote(updatedNote)) {
+    //   res.status(500).send('Invalid data type')
+    // }
 	  res.send({ updatedNote })
     // --- end of succ flow ---
 
@@ -100,21 +116,10 @@ router.put('/', (req, res) => {
     // Upon fail, run the following lines to respond with an error
 
     // --- begin of fail flow ---
-    res.status(500).send('Fail to update')
+    // res.status(500).send('Fail to update')
     // --- end of fail flow ---
 
-	*/
-
-
-
-		// TODO-5.1: Remove this section once you start working on TODO-5
-  	// --- Remove section begins ---
-  	const updatedNote = { id: noteId, text: newText, dateCreated: '2021-04-15', lastModified: new Date().toISOString().split('T')[0]}
-		if (!validateNote(updatedNote)) {
-      res.status(500).send('Invalid data type')
-    }
-  	res.send({ updatedNote })
-  	// --- Remove section ends ---
+  })
 })
 /* -------------------------------------------------------------------------- */
 
@@ -131,11 +136,14 @@ router.delete('/', (req, res) => {
 	*/
 	const noteId = req.body.id
 
-  /*
+  let deleteNote = `DELETE FROM notes
+                    WHERE id = `+ noteId +``
 
-    // Your code here...
-
-
+  db.query(deleteNote, (err)=>{
+    if(err){
+      throw err
+    }
+  })
 
     // Upon succ, run the following lines to validate the response object and respond to client
 
@@ -148,17 +156,8 @@ router.delete('/', (req, res) => {
     // Upon fail, run the following lines to respond with an error
 
     // --- begin of fail flow ---
-    res.status(500).send('Fail to delete')
+    // res.status(500).send('Fail to delete')
     // --- end of fail flow ---
-
-  */
-
-
-
-  // TODO-6.1: Remove this section once you start working on TODO-6
-  // --- Remove section begins ---
-  res.send()
-  // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
 

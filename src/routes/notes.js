@@ -14,14 +14,16 @@ router.get('/', (req, res) => {
       Your return object should be something similar to this:
         [{ id, text, dateCreated, lastModified }]
   */
+  let allNotes = `SELECT * FROM notes`
 
-  /*
+  let notes = []
 
-    // Your code here...
+  db.query(allNotes, (err, results)=>{
+    if(err) {
+      throw err
+    }
 
-    const notes = [] // this is the response object, make sure to replace with actual value
-
-
+    notes = results  // this is the response object, make sure to replace with actual value
 
     // Upon succ, run the following lines to validate the response object and respond to client
 
@@ -33,28 +35,11 @@ router.get('/', (req, res) => {
     // --- end of succ flow ---
 
 
-
     // Upon fail, run the following line to respond with an error
-
     // --- begin of fail flow ---
-    res.status(500).send('Fail to query')
+    // res.status(500).send('Fail to query')
     // --- end of fail flow ---
-    
-  */
-
-
-
-  // TODO-3.1: Remove this section once you start working on TODO-3
-  // --- Remove section begins ---
-  const notes = [ 
-    { id: 11, text: 'This is dummy note from fetch all!', dateCreated: '2021-04-15', lastModified: '2021-04-17' },
-    { id: 12, text: 'This is another dummy note from fetch all!', dateCreated: '2021-09-15', lastModified: '2021-10-17' }
-  ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
-  // --- Remove section ends ---
+  }) 
 })
 /* -------------------------------------------------------------------------- */
 
@@ -75,12 +60,16 @@ router.get('/search/:searchKey', (req, res) => {
   */
   const searchKey = req.params.searchKey
   console.log(searchKey)
- 
-  /*
 
-    // Your code here...
+  let searchNote = `SELECT * FROM notes
+                    WHERE text LIKE '%`+ searchKey +`%'`
 
-    const notes = [] // this is the response object, make sure to replace with actual value
+  db.query(searchNote, (err, results)=>{
+    if(err){
+      throw err
+    }
+
+    const notes = results // this is the response object, make sure to replace with actual value
 
 
     // Upon succ, run the following lines to validate the response object and respond to client
@@ -97,21 +86,10 @@ router.get('/search/:searchKey', (req, res) => {
     // Upon fail, run the following line to response with error
 
     // --- begin of fail flow ---
-    res.status(500).send('Fail to query')
+    // res.status(500).send('Fail to query')
     // --- end of fail flow ---
-    
-  */
-
-
-
-  // TODO-7.1: Remove this line once you start working on TODO-7
-  // --- Remove section begins ---
-  const notes = [ { id: 5, text: `This is a dummy note from search contains search key ${searchKey}!`, dateCreated: '2021-04-15', lastModified: '2021-04-17' } ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
-  // --- Remove section ends ---
+  })
+  
 })
 /* -------------------------------------------------------------------------- */
 
@@ -124,11 +102,13 @@ router.delete('/', (req, res) => {
       Delete all notes from the database
   */
 
-  /*
+  let deleteNotes = `TRUNCATE notes`
 
-    // Your code here...
-
-
+  db.query(deleteNotes, (err)=>{
+    if(err){
+      throw err
+    }
+  })
 
     // Upon succ, run the following lines to validate the response object and reponse to client
 
@@ -144,14 +124,6 @@ router.delete('/', (req, res) => {
     res.status(500).send('Fail to delete')
     // --- end of fail flow ---
 
-  */
-
-
-
-  // TODO-8.1: Remove this section once you start working on TODO-8
-  // --- Remove section begins ---
-  res.send()
-  // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
 
